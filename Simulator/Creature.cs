@@ -64,4 +64,22 @@ public class Creature
     }
 
     public Creature() { }
+
+    public void Go(Direction direction)
+    {
+        Console.WriteLine($"{Name} goes {direction.ToString().ToLower()}");
+    }
+
+    public void Go(Direction[] directions)
+    {
+        foreach (var direction in directions)
+            Go(direction);
+    }
+
+    public void Go(string directionstr)
+    {
+        foreach(var direction in DirectionParser.Parse(directionstr))
+            Go(direction);
+    }
+
 }
