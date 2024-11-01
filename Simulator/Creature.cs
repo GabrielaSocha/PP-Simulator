@@ -1,50 +1,26 @@
-﻿namespace Simulator;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Simulator;
 
 public abstract class Creature
 {
     private string name = "Unknown";
     public string Name
     {
-        get { return name; }
+        get => name;
         init
         {
-            if (string.IsNullOrEmpty(value))
-                return;
-            value = value.Trim();
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
-            if (value.Length > 25)
-            {
-                value = value.Substring(0, 25).TrimEnd().PadRight(3, '#');
-            }
-            if (char.IsLower(value[0]))
-            {
-                value = char.ToUpper(value[0]) + value.Substring(1);
-            }
-            name = value;
+            if (string.IsNullOrEmpty(name)) return;
+            name = Validator.Shortener(value, 3, 25, '#');
         }
 
     }
     private int level = 1;
     public int Level
     {
-        get { return level; }
-        init
-        {
-            if (value == null)
-                return;
-            if (value < 1)
-                value = 1;
-            if (value > 10)
-                value = 10;
-            level = value;
-        }
-    }
-    public string Info
-    {
-        get { return $"{Name} [{Level}]"; }
+        get => level;
+        init => level = Validator.Limiter(value, 1, 10);
+        
     }
     public abstract void SayHi();
     public void Upgrade()
@@ -79,5 +55,7 @@ public abstract class Creature
             Go(direction);
     }
     public abstract int Power { get; }
+    public abstract string Info { get; }
+    public override string ToString() => $"{GetType().Name.ToUpper()}: {Info}";
 
 }

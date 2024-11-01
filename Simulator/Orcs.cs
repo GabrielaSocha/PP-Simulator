@@ -5,13 +5,8 @@ public class Orc : Creature
     private int rage = 1;
     public int Rage
     {
-        get { return rage; }
-        init
-        {
-            if (value < 0) value = 0;
-            if (value > 10) value = 10;
-            rage = value;
-        }
+        get => rage;
+        init => rage = Validator.Limiter(value, 0, 10);
     }
 
     public static int counterO = 0;
@@ -34,4 +29,6 @@ public class Orc : Creature
     public Orc() { }
     public override int Power => 7 * Level + 3 * Rage;
     public override void SayHi() => Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.");
+    public override string Info => $"{Name} [{Level}][{Rage}]";
+
 }

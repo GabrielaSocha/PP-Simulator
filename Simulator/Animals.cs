@@ -5,38 +5,16 @@ namespace Simulator;
 public class Animals
 {
     private string description = "Unknown";
-    private bool IsDesSet = false;
     public required string Description
-    { 
-        get { return description; }
-        set
+    {
+        get => description;
+        init
         {
-            if (IsDesSet)
-                return;
-            if (string.IsNullOrEmpty(value))
-            {
-                value = "Unknown";
-            }
-            value = value.Trim();
-            if (value.Length < 3)
-            {
-                value = value.PadRight(3, '#');
-            }
-            if (value.Length > 15)
-            {
-                value = value.Substring(0, 15).TrimEnd();
-            }
-            if (char.IsLower(value[0]))
-            {
-                value = char.ToUpper(value[0]) + value.Substring(1);
-            }
-            description = value;
-            IsDesSet = true;
+            if (string.IsNullOrEmpty(value)) return;
+            description = Validator.Shortener(value, 3, 15, '#');
         }
     }
     public uint Size { get; set; } = 3;
-    public string Info
-    {
-        get { return $"{Description} <{Size}>"; }
-    }
+    public virtual string Info => $"{Description} <{Size}>";
+    public override string ToString() => $"{GetType().Name.ToUpper()}: {Info}";
 }
