@@ -9,7 +9,7 @@ public class Orc : Creature
         init => rage = Validator.Limiter(value, 0, 10);
     }
 
-    public static int counterO = 0;
+    private int counterO = 0;
     public void Hunt()
     {
         Console.WriteLine($"{Name} is hunting.");

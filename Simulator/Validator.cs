@@ -12,13 +12,13 @@ public static class Validator
     public static string Shortener(string value, int min, int max, char placeholder)
     {
         value = value.Trim();
-        if (value.Length < min)
-        {
-            value = value.PadRight(min, placeholder);
-        }
         if (value.Length > max)
         {
             value = value.Substring(0, max).TrimEnd().PadRight(min, placeholder);
+        }
+        if (value.Length < min)
+        {
+            value = value.PadRight(min, placeholder);
         }
         if (char.IsLower(value[0]))
         {

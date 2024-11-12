@@ -10,7 +10,7 @@ public class Elf : Creature
         get => agility;
         init => agility = Validator.Limiter(value, 0, 10);
     }
-    public static int counterS = 0;
+    private int counterS = 0;
     public void Sing()
     {
         Console.WriteLine($"{Name} is singing.");
