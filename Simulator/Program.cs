@@ -1,4 +1,5 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+namespace Simulator;
 
 internal class Program
 {
@@ -8,6 +9,7 @@ internal class Program
         Console.WriteLine(p.Next(Direction.Right));
         Console.WriteLine(p.NextDiagonal(Direction.Right));
         Lab5a();
+        Lab5b();
     }
 
     static void Lab5a()
@@ -33,6 +35,33 @@ internal class Program
         }
         Console.WriteLine(rectangle0.Contains(new Point(2,1)));
         Console.WriteLine(rectangle0.Contains(new Point(5,8)));
+    }
+    static void Lab5b()
+    {
+        SmallSquareMap smallSquareMap = new SmallSquareMap(11);
+        
+        Point position = new Point(0,0);
+        Console.WriteLine($"Your position: {position}");
+
+        position = smallSquareMap.Next(position, Direction.Up);
+        position = smallSquareMap.NextDiagonal(position, Direction.Up);
+        Console.WriteLine($"Your position: {position}");
+
+        try
+        {
+            SmallSquareMap smallSquareMap1 = new SmallSquareMap(30);
+
+        }
+        catch (ArgumentOutOfRangeException mapSize)
+        {
+
+            Console.WriteLine(mapSize.Message);
+        }
+        for (int i = 0; i < 11; i++)
+        {
+            position = smallSquareMap.NextDiagonal(position, Direction.Up);
+            Console.WriteLine($"Your position: {position}");
+        }
     }
     
 }
