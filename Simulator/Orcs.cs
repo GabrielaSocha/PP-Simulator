@@ -1,4 +1,6 @@
-﻿namespace Simulator;
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Simulator;
 
 public class Orc : Creature
 {
@@ -12,7 +14,6 @@ public class Orc : Creature
     private int counterO = 0;
     public void Hunt()
     {
-        Console.WriteLine($"{Name} is hunting.");
         counterO++;
         if (counterO == 2)
         {
@@ -28,7 +29,7 @@ public class Orc : Creature
     }
     public Orc() { }
     public override int Power => 7 * Level + 3 * Rage;
-    public override void SayHi() => Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.");
+    public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
     public override string Info => $"{Name} [{Level}][{Rage}]";
 
 }
