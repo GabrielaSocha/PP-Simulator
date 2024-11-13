@@ -27,6 +27,6 @@ public class Elf : Creature
     }
     public Elf() { }
     public override int Power => 8 * Level + 2 * Agility;
-    public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}."
+    public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}.";
     public override string Info => $"{Name} [{Level}][{Agility}]";
 }
