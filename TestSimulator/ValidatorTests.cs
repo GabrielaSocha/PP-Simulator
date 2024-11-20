@@ -24,6 +24,7 @@ public class ValidatorTests
     [InlineData("    hi    ", 5, 10, '_', "Hi___")]
     [InlineData("a", 2, 4, '_', "A_")]
     [InlineData("apple", 3, 5, '_', "Apple")]
+    [InlineData("a    b", 3, 5, '#', "A##")]
     public void Shortener_ShouldProcessStringCorrectly(string value, int min, int max, char placeholder, string expected)
     {
 
