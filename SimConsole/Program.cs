@@ -1,20 +1,46 @@
-﻿namespace SimConsole;
+﻿using Simulator;
+using Simulator.Maps;
+using System.Text;
 
-public static class Box
+namespace SimConsole
 {
-    public const char
-        Horizontal = '\u2500',
-        Vertical = '\u2502',
-        Cross = '\u253C',
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
 
-        TopLeft = '\u250C',
-        TopRight = '\u2510',
-        TopMid = '\u252C',
 
-        BottomLeft = '\u2514',
-        BottomMid = '\u2534',
-        BottomRight = '\u2518',
+            SmallSquareMap map = new(8);
+            List<Creature> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
+            List<Point> points = [new(2, 2), new(3, 1)];
+            string moves = "lrudru";
 
-        MidLeft = '\u251C',
-        MidRight = '\u2524';
+            //SmallSquareMap map = new(8);
+            //List<Creature> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
+            //List<Point> points = [new(2, 2), new(3, 1)];
+            //string moves = "druuldrulllu";
+
+            Simulation simulation = new(map, creatures, points, moves);
+            MapVisualizer mapVisualizer = new(simulation.Map);
+
+
+            Console.WriteLine("Starting Positions: ");
+            mapVisualizer.Draw();
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+
+            while (!simulation.Finished)
+            {
+                Console.WriteLine($"<{simulation.CurrentCreature.GetType().Name} - {simulation.CurrentCreature.Info}> " +
+                    $"from {simulation.CurrentCreature.Position} goes {simulation.CurrentMoveName}");
+
+                simulation.Turn();
+                mapVisualizer.Draw();
+
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadLine();
+            }
+        }
+    }
 }
