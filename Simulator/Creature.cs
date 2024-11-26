@@ -1,9 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using Simulator.Maps;
 namespace Simulator;
 
 public abstract class Creature
 {
+    public Map? Map { get; private set; }
+
+    public Point Position { get; private set; }
+
+
     private string name = "Unknown";
     public string Name
     {
@@ -38,23 +43,24 @@ public abstract class Creature
 
     public Creature() { }
 
-    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
-
-    public string[] Go(Direction[] directions)
+    public void InitMapAndPosition(Map map, Point position)
     {
-        List<string> list = new List<string>();
-        foreach (var direction in directions)
-            list.Add(Go(direction));
-        return list.ToArray();
+        Map = map;
+        Position = position;
+        map.Add(this, Position);
     }
-
-    public string[] Go(string directionstr)
+    public void Go(Direction direction)
     {
-        List<string> list = new List<string>();
-        foreach(var direction in DirectionParser.Parse(directionstr))
-            list.Add(Go(direction));
-        return list.ToArray();
+        if (Map == null) throw new ArgumentNullException(nameof(Map), "Chose map");
+        Point GoNext = Map.Next(Position, direction);
+
+        if (GoNext.Equals(Position)) return;
+
+        Map.Move(this, Position, GoNext);
+        Position = GoNext;
+
     }
+  
     public abstract int Power { get; }
     public abstract string Info { get; }
     public override string ToString() => $"{GetType().Name.ToUpper()}: {Info}";
