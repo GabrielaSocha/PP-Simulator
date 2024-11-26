@@ -42,7 +42,7 @@ public class Simulation
     /// <summary>
     /// Lowercase name of direction which will be used in current turn.
     /// </summary>
-    public string CurrentMoveName => Moves[_currentTurn % Moves.Length].ToString();
+    public string CurrentMoveName => DirectionParser.Parse(Moves[_currentTurn % Moves.Length].ToString())[0].ToString();
 
     /// <summary>
     /// Simulation constructor.
@@ -72,12 +72,12 @@ public class Simulation
         Map = map ?? throw new ArgumentNullException(nameof(map));
         Creatures = creatures;
         Positions = positions;
-        Moves = moves;
         for (int i = 0; i < creatures.Count; i++)
         {
             Creatures[i].InitMapAndPosition(Map, Positions[i]);
         }
-        Moves = DirectionParser.Parse(moves).ToString();
+        foreach (var direction in DirectionParser.Parse(moves))
+            Moves += direction.ToString()[0];
     }
 
     public void Turn()
@@ -86,8 +86,7 @@ public class Simulation
         {
             throw new InvalidOperationException("Simulation is already finished.");
         }
-
-        CurrentCreature.Go(DirectionParser.Parse(CurrentMoveName)[0]);
+        CurrentCreature.Go(DirectionParser.Parse(Moves[_currentTurn].ToString())[0]);
         _currentTurn++;
 
         if (_currentTurn >= Moves.Length)
