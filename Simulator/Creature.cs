@@ -2,12 +2,13 @@
 using Simulator.Maps;
 namespace Simulator;
 
-public abstract class Creature
+public abstract class Creature : IMappable
 {
     public Map? Map { get; private set; }
 
     public Point Position { get; private set; }
 
+    public char Symbol => GetType().Name[0];
 
     private string name = "Unknown";
     public string Name

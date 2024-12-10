@@ -12,7 +12,7 @@ public class Simulation
     /// <summary>
     /// Creatures moving on the map.
     /// </summary>
-    public List<Creature> Creatures { get; }
+    public List<IMappable> Mappables { get; }
 
     /// <summary>
     /// Starting positions of creatures.
@@ -22,9 +22,9 @@ public class Simulation
     /// <summary>
     /// Cyclic list of creatures moves. 
     /// Bad moves are ignored - use DirectionParser.
-    /// First move is for first creature, second for second and so on.
+    /// First move is for first imappable, second for second and so on.
     /// When all creatures make moves, 
-    /// next move is again for first creature and so on.
+    /// next move is again for first imappable and so on.
     /// </summary>
     public string Moves { get; }
 
@@ -35,9 +35,9 @@ public class Simulation
 
     private int _currentTurn = 0;
     /// <summary>
-    /// Creature which will be moving current turn.
+    /// IMappable which will be moving current turn.
     /// </summary>
-    public Creature CurrentCreature => Creatures[_currentTurn % Creatures.Count];
+    public IMappable CurrentMappable => Mappables[_currentTurn % Mappables.Count];
 
     /// <summary>
     /// Lowercase name of direction which will be used in current turn.
@@ -51,7 +51,7 @@ public class Simulation
     /// if number of creatures differs from 
     /// number of starting positions.
     /// </summary>
-    public Simulation(Map map, List<Creature> creatures,
+    public Simulation(Map map, List<IMappable> creatures,
         List<Point> positions, string moves)
     {
         if (creatures == null || creatures.Count == 0)
@@ -70,11 +70,11 @@ public class Simulation
         }
 
         Map = map ?? throw new ArgumentNullException(nameof(map));
-        Creatures = creatures;
+        Mappables = creatures;
         Positions = positions;
         for (int i = 0; i < creatures.Count; i++)
         {
-            Creatures[i].InitMapAndPosition(Map, Positions[i]);
+            Mappables[i].InitMapAndPosition(Map, Positions[i]);
         }
         foreach (var direction in DirectionParser.Parse(moves))
             Moves += direction.ToString()[0];
@@ -86,7 +86,7 @@ public class Simulation
         {
             throw new InvalidOperationException("Simulation is already finished.");
         }
-        CurrentCreature.Go(DirectionParser.Parse(Moves[_currentTurn].ToString())[0]);
+        CurrentMappable.Go(DirectionParser.Parse(Moves[_currentTurn].ToString())[0]);
         _currentTurn++;
 
         if (_currentTurn >= Moves.Length)
