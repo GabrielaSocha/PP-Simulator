@@ -6,7 +6,13 @@ namespace Simulator.Maps;
 /// Map of points.
 /// </summary>
 public abstract class Map
-{ 
+{
+    public readonly Dictionary<Point, List<IMappable>> fields;
+    public int SizeX { get; }
+    public int SizeY { get; }
+
+    private int sizeX, sizeY;
+
     private readonly Rectangle _map;
     protected Map(int sizeX, int sizeY)
     {
@@ -15,11 +21,9 @@ public abstract class Map
         SizeX = sizeX;
         SizeY = sizeY;
         _map = new Rectangle(0, 0, SizeX-1, SizeY-1);
+        fields = new Dictionary<Point, List<IMappable>>();
     }
 
-    public int SizeX { get; }
-    public int SizeY { get; }
-    
     /// <summary>
     /// Check if give point belongs to the map.
     /// </summary>
@@ -45,8 +49,21 @@ public abstract class Map
     /// <returns>Next point.</returns>
     public abstract Point NextDiagonal(Point p, Direction d);
 
-    public abstract void Add(IMappable mappable, Point position);
-    public abstract void Remove(IMappable mappable, Point position);
+    public virtual void Add(IMappable mappable, Point position)
+    {
+        fields.TryGetValue(position, out var list);
+
+        if (list != null)
+            list.Add(mappable);
+        else
+            fields[position] = new List<IMappable> { mappable };
+    }
+
+    public virtual void Remove(IMappable mappable, Point position)
+    {
+        if (fields.TryGetValue(position, out var list))
+            list.Remove(mappable);
+    }
 
     public virtual void Move(IMappable mappable, Point currentPosition, Point endPosition)
     {
@@ -56,5 +73,8 @@ public abstract class Map
     }
 
     public List<IMappable>? At(int x, int y) => At(new Point(x, y));
-    public abstract List<IMappable>? At(Point point);
+    public virtual List<IMappable>? At(Point position)
+    {
+        return fields.TryGetValue(position, out var list) ? (list.Count > 0 ? list : null) : null;
+    }
 }

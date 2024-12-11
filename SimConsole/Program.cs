@@ -8,36 +8,27 @@ namespace SimConsole
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            BigBounceMap bigBounceMap = new BigBounceMap(8, 6);
 
+            Elf elf = new Elf();
+            Orc orc = new Orc();
+            Animals rabbits = new Animals() { Description = "Rabbits" };
+            Birds ostrichs = new Birds() { Description = "Ostrichs" };
+            Birds eagles = new Birds() { Description = "Eagles" };
 
-            SmallTorusMap map = new(6, 8);
-            List<IMappable> mappables = [new Orc("Gorbag"), new Elf("Elandor"), new Animals { Description = "Króliki", Size = 10},
-                                            new Birds {Description = "Orły", Size = 10, CanFly = true},
-                                            new Birds {Description = "Strusie", Size = 8, CanFly = false}];
-            List<Point> points = [new(2, 2), new(3, 1), new(4, 2), new(3, 5), new(3, 3)];
-            string moves = "dlrludllrlrdurldurllldddurrr";
+            List<IMappable> mappables = new List<IMappable>() { elf, orc, rabbits, ostrichs, eagles };
+            List<Point> points = [new(7, 2), new(4, 5), new(4, 2), new(7, 5), new(3, 3)];
 
-            Simulation simulation = new(map, mappables, points, moves);
-            MapVisualizer mapVisualizer = new(simulation.Map);
+            string moves = "rrrrrdllrlrdurldurllldddurrr";
 
-            Console.WriteLine("Starting Positions: ");
-            mapVisualizer.Draw();
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadLine();
+            Simulation simulation = new(bigBounceMap, mappables, points, moves);
+            SimulationHisotry simulationHisotry = new(simulation);
 
-            while (!simulation.Finished)
-            {
-                Console.WriteLine($"<{simulation.CurrentMappable.GetType().Name} - " +
-                    $"{(simulation.CurrentMappable is Creature creature ? creature.Name + " from " + creature.Position : "")}> " +
-                    $"goes {simulation.CurrentMoveName}");
-
-                simulation.Turn();
-                mapVisualizer.Draw();
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadLine();
-            }
+            simulationHisotry.DispalyMoveInfo(5);
+            simulationHisotry.DispalyMoveInfo(10);
+            simulationHisotry.DispalyMoveInfo(15);
+            simulationHisotry.DispalyMoveInfo(20);
+        
         }
     }
 }
